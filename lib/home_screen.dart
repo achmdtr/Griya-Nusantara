@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.library_books_outlined),
             activeIcon: Icon(Icons.library_books),
-            label: 'Perpustakaan',
+            label: 'Koleksi',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
