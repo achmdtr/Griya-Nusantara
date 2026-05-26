@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen>
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
-        transitionDuration: const Duration(milliseconds: 400),
+        transitionDuration: const Duration(milliseconds: 1000),
       ),
     );
   }

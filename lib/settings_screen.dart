@@ -7,6 +7,7 @@ import 'constants/app_info.dart';
 import 'login_screen.dart';
 import 'theme/app_text_styles.dart';
 import 'utils/responsive_helper.dart';
+import 'feedback_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -63,10 +64,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       barrierDismissible: true,
       builder: (dialogContext) {
-        return _EditUsernameDialog(
-          initialName: _displayName,
-          userId: user.uid,
-        );
+        return _EditUsernameDialog(initialName: _displayName, userId: user.uid);
       },
     );
 
@@ -106,12 +104,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SizedBox(height: 16.sh),
               Text(
                 AppInfo.name,
-                style: AppTextStyles.loraBoldSecondary20.copyWith(fontSize: 20.sf),
+                style: AppTextStyles.loraBoldSecondary20.copyWith(
+                  fontSize: 20.sf,
+                ),
               ),
               SizedBox(height: 6.sh),
               Text(
                 'Versi ${AppInfo.versionLabel}',
-                style: AppTextStyles.manropeBody13Grey.copyWith(fontSize: 13.sf),
+                style: AppTextStyles.manropeBody13Grey.copyWith(
+                  fontSize: 13.sf,
+                ),
               ),
               SizedBox(height: 12.sh),
               Text(
@@ -129,7 +131,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onPressed: () => Navigator.pop(dialogContext),
               child: Text(
                 'Tutup',
-                style: AppTextStyles.manropeBoldPrimary.copyWith(fontSize: 14.sf),
+                style: AppTextStyles.manropeBoldPrimary.copyWith(
+                  fontSize: 14.sf,
+                ),
               ),
             ),
           ],
@@ -148,7 +152,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             return AlertDialog(
               title: Text(
                 'Hapus Akun',
-                style: AppTextStyles.loraBoldSecondary.copyWith(fontSize: 18.sf),
+                style: AppTextStyles.loraBoldSecondary.copyWith(
+                  fontSize: 18.sf,
+                ),
               ),
               content: Text(
                 'Apakah Anda yakin ingin menghapus akun ini? '
@@ -160,7 +166,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               actions: [
                 TextButton(
-                  onPressed: isLoading ? null : () => Navigator.pop(dialogContext),
+                  onPressed: isLoading
+                      ? null
+                      : () => Navigator.pop(dialogContext),
                   child: Text(
                     'Batal',
                     style: AppTextStyles.manropeSemi14.copyWith(
@@ -203,7 +211,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 SnackBar(
                                   content: Text(
                                     errorMsg,
-                                    style: AppTextStyles.manropeBody.copyWith(fontSize: 14.sf),
+                                    style: AppTextStyles.manropeBody.copyWith(
+                                      fontSize: 14.sf,
+                                    ),
                                   ),
                                   backgroundColor: Colors.red,
                                 ),
@@ -216,7 +226,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 SnackBar(
                                   content: Text(
                                     'Terjadi kesalahan: $e',
-                                    style: AppTextStyles.manropeBody.copyWith(fontSize: 14.sf),
+                                    style: AppTextStyles.manropeBody.copyWith(
+                                      fontSize: 14.sf,
+                                    ),
                                   ),
                                   backgroundColor: Colors.red,
                                 ),
@@ -224,9 +236,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             }
                           }
                         },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                  ),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                   child: isLoading
                       ? const SizedBox(
                           width: 20,
@@ -284,7 +294,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               style: AppTextStyles.manropeBody13Grey.copyWith(fontSize: 13.sf),
             )
           : null,
-      trailing: Icon(Icons.chevron_right, color: AppColors.greyText, size: 24.sw),
+      trailing: Icon(
+        Icons.chevron_right,
+        color: AppColors.greyText,
+        size: 24.sw,
+      ),
       onTap: onTap,
     );
   }
@@ -335,13 +349,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       indent: 16,
                       endIndent: 16,
                     ),
-                    _menuTile(
+                     _menuTile(
                       icon: Icons.info_outline_rounded,
                       iconBg: AppColors.primary.withValues(alpha: 0.1),
                       iconColor: AppColors.primary,
                       title: 'Tentang Aplikasi',
                       subtitle: '${AppInfo.name} • v${AppInfo.versionLabel}',
                       onTap: _showAboutDialog,
+                    ),
+                    const Divider(
+                      color: AppColors.border,
+                      height: 1,
+                      indent: 16,
+                      endIndent: 16,
+                    ),
+                    _menuTile(
+                      icon: Icons.chat_bubble_outline_rounded,
+                      iconBg: AppColors.primary.withValues(alpha: 0.1),
+                      iconColor: AppColors.primary,
+                      title: 'Saran dan Masukan',
+                      subtitle: 'Bantu kami menjadi lebih baik',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FeedbackScreen(
+                              initialName: _displayName,
+                              initialEmail: user.email ?? '',
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -382,7 +420,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       subtitle: Text(
                         user.email ?? '-',
-                        style: AppTextStyles.manropeBody13Grey.copyWith(fontSize: 13.sf),
+                        style: AppTextStyles.manropeBody13Grey.copyWith(
+                          fontSize: 13.sf,
+                        ),
                       ),
                     ),
                     const Divider(
@@ -427,10 +467,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
 /// Dialog edit nama — simpan ke Firestore di dalam dialog agar halaman induk tidak rebuild berat.
 class _EditUsernameDialog extends StatefulWidget {
-  const _EditUsernameDialog({
-    required this.initialName,
-    required this.userId,
-  });
+  const _EditUsernameDialog({required this.initialName, required this.userId});
 
   final String initialName;
   final String userId;
@@ -513,10 +550,15 @@ class _EditUsernameDialogState extends State<_EditUsernameDialog> {
               style: AppTextStyles.manropeField14.copyWith(fontSize: 14.sf),
               decoration: InputDecoration(
                 hintText: 'Masukkan nama Anda',
-                hintStyle: AppTextStyles.manropeHint14.copyWith(fontSize: 14.sf),
+                hintStyle: AppTextStyles.manropeHint14.copyWith(
+                  fontSize: 14.sf,
+                ),
                 filled: true,
                 fillColor: AppColors.white,
-                contentPadding: EdgeInsets.symmetric(horizontal: 16.sw, vertical: 12.sh),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16.sw,
+                  vertical: 12.sh,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(color: AppColors.border),
@@ -532,7 +574,9 @@ class _EditUsernameDialogState extends State<_EditUsernameDialog> {
                     width: 2,
                   ),
                 ),
-                errorStyle: AppTextStyles.manropeError12.copyWith(fontSize: 12.sf),
+                errorStyle: AppTextStyles.manropeError12.copyWith(
+                  fontSize: 12.sf,
+                ),
               ),
               validator: (value) {
                 final trimmed = value?.trim() ?? '';
