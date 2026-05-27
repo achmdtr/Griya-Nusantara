@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           'Griya Nusantara',
           style: GoogleFonts.lora(
-            color: AppColors.primary,
+            color: const Color.fromRGBO(27, 67, 50, 1),
             fontWeight: FontWeight.bold,
             fontSize: 24.sf,
           ),

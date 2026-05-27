@@ -8,6 +8,7 @@ import 'login_screen.dart';
 import 'theme/app_text_styles.dart';
 import 'utils/responsive_helper.dart';
 import 'feedback_screen.dart';
+import 'services/firestore_seeder.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -19,6 +20,73 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   String _displayName = 'Pengguna';
   bool _isLoadingUser = true;
+  bool _isSyncing = false;
+
+  Future<void> _syncDatabase() async {
+    if (_isSyncing) return;
+
+    setState(() => _isSyncing = true);
+
+    // Tampilkan dialog loading
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return AlertDialog(
+          content: Row(
+            children: [
+              const CircularProgressIndicator(color: AppColors.primary),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Text(
+                  'Mensinkronisasi database...',
+                  style: AppTextStyles.manropeBody.copyWith(fontSize: 14.sf),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    try {
+      // Jalankan seeding untuk rumah adat dan kuis
+      await FirestoreSeeder.seedSampleHouses();
+      await FirestoreSeeder.seedQuizQuestions();
+      
+      if (!mounted) return;
+      Navigator.pop(context); // Tutup dialog loading
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Sinkronisasi database berhasil! 🎉',
+            style: AppTextStyles.manropeBody,
+          ),
+          backgroundColor: AppColors.primary,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      Navigator.pop(context); // Tutup dialog loading
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Gagal sinkronisasi: $e',
+            style: AppTextStyles.manropeBody,
+          ),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isSyncing = false);
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -380,6 +448,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         );
                       },
+                    ),
+                    const Divider(
+                      color: AppColors.border,
+                      height: 1,
+                      indent: 16,
+                      endIndent: 16,
+                    ),
+                    _menuTile(
+                      icon: Icons.sync_rounded,
+                      iconBg: AppColors.primary.withValues(alpha: 0.1),
+                      iconColor: AppColors.primary,
+                      title: 'Sinkronisasi Database',
+                      subtitle: 'Sinkronisasikan data lokal ke Firestore',
+                      onTap: _syncDatabase,
                     ),
                   ],
                 ),

@@ -436,9 +436,210 @@ class FirestoreSeeder {
     final WriteBatch batch = FirebaseFirestore.instance.batch();
     sampleHouses.forEach((key, value) {
       final docRef = houses.doc(key);
-      batch.set(docRef, value);
+      final title = value['title'] ?? '';
+      final location = value['location'] ?? '';
+      final extraData = _getExtraContentForSeeding(title, location);
+
+      final updatedData = Map<String, dynamic>.from(value);
+      updatedData['filosofiAtap'] = extraData['filosofiAtap'];
+      updatedData['materials'] = extraData['materials'];
+      updatedData['fungsiRuangan'] = extraData['fungsiRuangan'];
+
+      batch.set(docRef, updatedData);
     });
     await batch.commit();
+  }
+
+  static Map<String, dynamic> _getExtraContentForSeeding(
+    String title,
+    String location,
+  ) {
+    final Map<String, Map<String, dynamic>> extraContentMap = {
+      'Rumah Gadang': {
+        'filosofiAtap':
+            'Garis atap yang melengkung dan menyapu, yang dikenal sebagai gonjong, dirancang menyerupai tanduk kerbau, hewan yang sangat dihormati dalam budaya Minangkabau. Selain itu, atap ini juga dikatakan mewakili bentuk haluan kapal, yang melambangkan warisan maritim nenek moyang mereka.',
+        'materials': [
+          {
+            'name': 'Kayu (Wood)',
+            'description':
+                'Pilar struktural utama dan panel dinding terbuat dari kayu jati atau juar berkualitas tinggi.',
+            'icon': 'forest',
+          },
+          {
+            'name': 'Ijuk (Thatch)',
+            'description':
+                'Material atap tradisional yang terbuat dari serat pohon aren, memberikan isolasi yang sangat baik.',
+            'icon': 'grass',
+          },
+          {
+            'name': 'Bambu (Bamboo)',
+            'description':
+                'Digunakan untuk lantai dan bagian ikat struktural sekunder, menawarkan fleksibilitas.',
+            'icon': 'eco',
+          },
+        ],
+        'fungsiRuangan':
+            'Bagian dalamnya adalah aula utama yang terbuka dan tanpa sekat (lanjar) yang digunakan untuk tempat tinggal bersama, makan, dan upacara. Bagian belakang dibagi menjadi kamar-kamar kecil (bilik) yang diperuntukkan bagi anak perempuan yang sudah menikah, mencerminkan struktur masyarakat matrilineal Minangkabau.',
+      },
+      'Rumah Bolon': {
+        'filosofiAtap':
+            'Bentuk atap Rumah Bolon melengkung menyerupai punggung kerbau atau bentuk perahu, melambangkan perjalanan hidup nenek moyang suku Batak serta perlindungan spiritual terhadap seluruh penghuni rumah.',
+        'materials': [
+          {
+            'name': 'Kayu (Wood)',
+            'description':
+                'Kayu keras berkualitas tinggi yang digunakan untuk tiang-tiang penyangga (soko) tanpa ditanam di tanah.',
+            'icon': 'forest',
+          },
+          {
+            'name': 'Ijuk (Thatch)',
+            'description':
+                'Atap dari serat ijuk yang diikat kencang pada kerangka kayu, memberikan ketahanan cuaca yang sangat baik.',
+            'icon': 'grass',
+          },
+          {
+            'name': 'Rotan (Rattan)',
+            'description':
+                'Digunakan sebagai pengikat struktural tradisional pengganti paku besi.',
+            'icon': 'eco',
+          },
+        ],
+        'fungsiRuangan':
+            'Bagian dalam merupakan ruang terbuka besar (jabu) tanpa sekat permanen. Pembagian ruang ditentukan secara adat, seperti jabu bona untuk kepala keluarga di sudut kanan belakang, dan jabu suhat untuk anak tertua.',
+      },
+      'Rumah Betang': {
+        'filosofiAtap':
+            'Atap tinggi melengkung memberikan sirkulasi udara optimal di daerah tropis basah serta melambangkan hubungan spiritual yang tinggi dengan para leluhur di langit.',
+        'materials': [
+          {
+            'name': 'Kayu Ulin (Ironwood)',
+            'description':
+                'Kayu besi khas Kalimantan yang sangat kuat dan tahan air untuk tiang pancang setinggi 3-5 meter.',
+            'icon': 'forest',
+          },
+          {
+            'name': 'Bambu (Bamboo)',
+            'description':
+                'Digunakan sebagai lantai (lanting) yang memberikan kelenturan dan kesejukan alami.',
+            'icon': 'eco',
+          },
+          {
+            'name': 'Daun Rumbia',
+            'description':
+                'Atap berbahan daun rumbia atau sirap kayu ulin yang disusun rapi untuk melindungi dari hujan deras.',
+            'icon': 'grass',
+          },
+        ],
+        'fungsiRuangan':
+            'Terdiri dari bilik-bilik keluarga (sadang) di sepanjang bagian belakang untuk privasi masing-masing keluarga, sementara bagian depan berupa selasar panjang terbuka untuk musyawarah.',
+      },
+      'Rumah Joglo Jawa Tengah': {
+        'filosofiAtap':
+            'Bentuk atap tajug (gunung) melambangkan gunung suci, tempat bersemayamnya para dewa atau leluhur, serta mencerminkan ketenangan dan keseimbangan hidup masyarakat Jawa.',
+        'materials': [
+          {
+            'name': 'Kayu Jati (Teakwood)',
+            'description':
+                'Kayu utama yang sangat kuat dan berharga tinggi, digunakan untuk soko guru dan gebyok ukir.',
+            'icon': 'forest',
+          },
+          {
+            'name': 'Genteng Tanah Liat',
+            'description':
+                'Atap genteng tanah liat tradisional yang menyerap panas matahari, menjaga suhu ruangan tetap dingin.',
+            'icon': 'home',
+          },
+          {
+            'name': 'Batu Candi',
+            'description':
+                'Fondasi batu sebagai tumpuan tiang utama agar terhindar dari pelapukan tanah.',
+            'icon': 'build',
+          },
+        ],
+        'fungsiRuangan':
+            'Dibagi menjadi tiga bagian utama: Pendopo di depan untuk menerima tamu, Pringgitan di tengah untuk pertunjukan seni, dan Dalem Ageng di belakang sebagai area keluarga privat.',
+      },
+      'Rumah Tongkonan': {
+        'filosofiAtap':
+            'Atap melengkung ekstrem yang menyerupai perahu melambangkan perahu leluhur Austronesia, sekaligus menyerupai tanduk kerbau yang melambangkan kekuatan.',
+        'materials': [
+          {
+            'name': 'Kayu Uru',
+            'description':
+                'Kayu lokal berkualitas tinggi yang tahan lapuk, digunakan untuk panel dinding dan tiang penopang.',
+            'icon': 'forest',
+          },
+          {
+            'name': 'Bambu (Bamboo)',
+            'description':
+                'Atap terbuat dari susunan bambu yang dilapisi ijuk, dirancang agar air hujan mengalir dengan cepat.',
+            'icon': 'eco',
+          },
+          {
+            'name': 'Tanduk Kerbau',
+            'description':
+                'Hiasan tanduk kerbau asli yang dipasang di tiang depan sebagai lambang status sosial keluarga.',
+            'icon': 'star',
+          },
+        ],
+        'fungsiRuangan':
+            'Terbagi menjadi tiga bagian: Banua Sangka\' di bagian utara untuk tamu, Sulluk Banua di tengah untuk tempat tidur, dan Banua Kakia\' di selatan untuk tetua adat.',
+      },
+      'Rumah Honai': {
+        'filosofiAtap':
+            'Bentuk bulat dan atap kubah jerami melambangkan persatuan suku Dani serta meminimalkan paparan angin pegunungan yang dingin agar panas api di dalam tetap terjaga.',
+        'materials': [
+          {
+            'name': 'Kayu Hutan (Wood)',
+            'description':
+                'Kayu kuat pilihan dari hutan Papua untuk tiang penopang utama dan dinding lingkaran.',
+            'icon': 'forest',
+          },
+          {
+            'name': 'Alang-alang / Jerami',
+            'description':
+                'Atap tumpukan jerami tebal yang berfungsi sebagai isolator termal alami dari suhu dingin ekstrem.',
+            'icon': 'grass',
+          },
+          {
+            'name': 'Rotan (Rattan)',
+            'description':
+                'Pengikat kerangka atap jerami agar tahan terhadap tiupan angin kencang.',
+            'icon': 'eco',
+          },
+        ],
+        'fungsiRuangan':
+            'Terdiri dari dua lantai: lantai bawah dengan perapian di tengah untuk berkumpul, serta lantai atas berlandaskan jerami untuk tempat tidur yang hangat.',
+      },
+    };
+
+    return extraContentMap[title] ??
+        {
+          'filosofiAtap':
+              'Bentuk atap $title dirancang dengan kemiringan tertentu yang adaptif terhadap iklim tropis basah di Indonesia, sekaligus melambangkan doa dan rasa syukur kepada Sang Pencipta.',
+          'materials': [
+            {
+              'name': 'Kayu Lokal (Local Wood)',
+              'description':
+                  'Bahan struktural utama untuk tiang dan dinding yang diambil langsung dari alam sekitar.',
+              'icon': 'forest',
+            },
+            {
+              'name': 'Serat Alam',
+              'description':
+                  'Atap dari ijuk, rumbia, atau ilalang kering yang memberikan sirkulasi udara alami.',
+              'icon': 'grass',
+            },
+            {
+              'name': 'Bambu / Rotan',
+              'description':
+                  'Digunakan untuk lantai bilah dan pengikat struktural tradisional.',
+              'icon': 'eco',
+            },
+          ],
+          'fungsiRuangan':
+              'Tata ruang di dalam $title dirancang fleksibel dengan membagi area menjadi ruang publik di bagian depan untuk musyawarah adat, dan ruang privat di bagian belakang untuk keluarga.',
+        };
   }
 
   /// Melakukan seed data 100 pertanyaan kuis ke Firestore (kuis_soal)
