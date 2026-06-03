@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'app_colors.dart';
 import 'quiz_confirmation_screen.dart';
-import 'quiz_screen.dart';
 import 'utils/responsive_helper.dart';
 
 class HouseDetailScreen extends StatefulWidget {
