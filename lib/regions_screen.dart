@@ -432,7 +432,7 @@ class _RegionsScreenState extends State<RegionsScreen>
               curve: Curves.easeInOutCubic,
               height: _selectedRegion == null
                   ? 0
-                  : 118.sh, // 0 saat awal/kosong, 132 saat pulau diklik agar card tidak overflow
+                  : 105.sh, // 0 saat awal/kosong, 105 saat pulau diklik agar card tidak overflow
               child: _selectedRegion == null
                   ? const SizedBox.shrink()
                   : FadeTransition(
@@ -637,6 +637,8 @@ class _RegionActionCard extends StatelessWidget {
                 SizedBox(height: 3.sh),
                 Text(
                   region.description,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.poppins(
                     fontSize: 11.sf,
                     color: AppColors.greyText,
