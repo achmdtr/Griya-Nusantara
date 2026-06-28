@@ -168,4 +168,4 @@ Proyek ini dibuat untuk memenuhi Ujian Akhir Semester (UAS) pada mata kuliah Pem
 * **Dosen Pengampu**: YUYUN KHAIRUNISA S.Si., M.Kom
 
 ---
-*Selamat belajar dan melestarikan budaya bangsa melalui **Griya Nusantara**!* 🏛️🇮🇩
+*Selamat belajar dan melestarikan budaya bangsa melalui **Griya Nusantara**!* 🏛️
